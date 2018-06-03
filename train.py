@@ -81,6 +81,9 @@ def cat_dice_loss(y_true, y_pred):
     #return dice_loss(y_true, y_pred)
 def get_unet_128(input_shape=(128, 128, 3),
                  num_classes=2):
+	'''
+	This U-Net implementation is derived from: 	https://github.com/petrosgk/Kaggle-Carvana-Image-Masking-Challenge
+	'''
     inputs = Input(shape=input_shape)
     # 256
 
