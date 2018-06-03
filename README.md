@@ -4,7 +4,8 @@ Henry Yau
  May 28, 2018
 
 ## Problem description
-The challenge presented was to perform a pixel wise identification of the road and vehicles from a video of the car simulator Carla. The solution attempted here is image segmentation using a U-Net implemented with Keras with a TensorFlow backend.
+The challenge presented was to perform a pixel wise identification of the road and vehicles from a video of the car simulator Carla. http://carla.readthedocs.io/en/latest/
+The solution attempted here is image segmentation using a U-Net implemented with Keras with a TensorFlow backend.
 ### Training data
 The training data provided is a set of 1000 800x600 PNG images from the hood of a simulated car and their corresponding labels, also 800x600 PNG images. The training labels have integer values in the red channels corresponding to the ID of the particular object located at that given pixel. The training labels are preprocessed to move ID's not corresponding to the road or vehicles to a single label and to relabel pixels corresponding to road markings to the road label. In addition, pixels corresponding to the vehicle hood are set to 0 (none). To prevent overfitting, additional simulated runs on Carla were generated providing 2300 more training images and labels. In addition to the additional simulated runs, data augmentation was used. The input images and labels are then resized to 256x256.
 
