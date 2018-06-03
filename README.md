@@ -1,4 +1,5 @@
-# Lyft Perception Challenge
+
+# Image segmentation using U-Net
 Henry Yau
  May 28, 2018
 
@@ -6,6 +7,13 @@ Henry Yau
 The challenge presented was to perform a pixel wise identification of the road and vehicles from a video of the car simulator Carla. The solution attempted here is image segmentation using a U-Net implemented with Keras with a TensorFlow backend.
 ### Training data
 The training data provided is a set of 1000 800x600 PNG images from the hood of a simulated car and their corresponding labels, also 800x600 PNG images. The training labels have integer values in the red channels corresponding to the ID of the particular object located at that given pixel. The training labels are preprocessed to move ID's not corresponding to the road or vehicles to a single label and to relabel pixels corresponding to road markings to the road label. In addition, pixels corresponding to the vehicle hood are set to 0 (none). To prevent overfitting, additional simulated runs on Carla were generated providing 2300 more training images and labels. In addition to the additional simulated runs, data augmentation was used. The input images and labels are then resized to 256x256.
+
+
+Training image and label: 
+![alt text][trainingImage1]
+
+[trainingImage1]:https://raw.githubusercontent.com/henyau/Image-Segmentation-with-Unet/master/images/train_label.png "Training image and label"
+
 
 ### Data augmentation
 The standard data generator on Keras does not appear to be meant for multiclass image segmentation problems like this one. However there is a trick intended for transforming masks which can be applied here. By providing a the same seed to both the image and label ImageDataGenerator, the same transformations are applied to both. Using zip() creates an iterator which provides the image/label pair.
@@ -60,7 +68,12 @@ Finally a weighted cross entropy is a log loss function where each categorical l
 $$\mathrm{loss} = -\sum \mathrm{truth}\cdot  \log(\mathrm{pred})  w_i$$
 
 ### Results
-I intended to train the model with only the weighted categorical cross entropy and the dice loss then add the fbeta loss when a local mininum was found, but ran out of time on the virtual machine.  As is, the dice score on the validation set is about 0.98 and fbeta around 0.89 so the testing parameters had to be tweeked somewhat.
+I intended to train the model with only the weighted categorical cross entropy and the dice loss then add the f-beta loss when a local mininum was found, but ran out of time on the virtual machine.  The validation Dice score was around 0.98 at the end of training.  The model still produces adequate results at over 11 frames per second with an f-beta score of over 0.98 for the road and 0.81 for vehicles.
 
+A video of a test sample can be viewed in the images directory.
+An example test image is shown below: 
+![alt text][testImage1]
 
+[testImage1]:https://raw.githubusercontent.com/henyau/Image-Segmentation-with-Unet/master/images/testOut.png "Testing output"
 
+With more time for further training, the accuracy can likely be increased significantly.  
