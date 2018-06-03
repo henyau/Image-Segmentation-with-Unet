@@ -39,6 +39,8 @@ The general structure of the U-Net starts out  similar to a generic CNN used for
 
 ## Implementation details
 ### U-Net layers
+This implementation used here is derived from: 	https://github.com/petrosgk/Kaggle-Carvana-Image-Masking-Challenge
+
 The contraction path layers are implemented in Keras as :
 ~~~
     down = Conv2D(64, (3, 3), padding='same')(input)
@@ -69,12 +71,9 @@ Finally a weighted cross entropy is a log loss function where each categorical l
 $$\mathrm{loss} = -\sum \mathrm{truth}\cdot  \log(\mathrm{pred})  w_i$$
 
 ### Results
-I intended to train the model with only the weighted categorical cross entropy and the dice loss then add the f-beta loss when a local mininum was found, but ran out of time on the virtual machine.  The validation Dice score was around 0.98 at the end of training.  The model still produces adequate results at over 11 frames per second with an f-beta score of over 0.98 for the road and 0.81 for vehicles.
+I intended to train the model with only the weighted categorical cross entropy and the dice loss then add the f-beta loss when a local mininum was found, but ran out of time on the virtual machine.  The validation Dice score was around 0.98 at the end of training.  The model still produces adequate results at over 11 frames per second with an f-beta score of over 0.98 for the road and 0.81 for vehicles. With more time for further training, the accuracy can likely be increased significantly.  
 
 A video of a test sample can be viewed in the images directory.
-An example test image is shown below: 
-![alt text][testImage1]
+Clicking on the sample test output image below links to a video of a sample output overlaid on the test video. 
 
-[testImage1]:https://raw.githubusercontent.com/henyau/Image-Segmentation-with-Unet/master/images/testOut.png "Testing output"
-
-With more time for further training, the accuracy can likely be increased significantly.  
+[![IMAGE ALT TEXT HERE](https://raw.githubusercontent.com/henyau/Image-Segmentation-with-Unet/master/images/testOut.png)](https://github.com/henyau/Image-Segmentation-with-Unet/blob/master/images/outputvideo.mp4?raw=true)
