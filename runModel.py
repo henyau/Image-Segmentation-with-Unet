@@ -1,3 +1,4 @@
+from keras.models import load_model
 import sys, skvideo.io, json, base64
 from skimage import exposure
 import numpy as np
@@ -41,10 +42,10 @@ answer_key = {}
 frame = 1
 
 # Load model
-model = get_unet_128((sx,sy,3),3)
+#model = get_unet_128((sx,sy,3),3)
 #model.load_weights("unet_Datgen.hdf5")
 #model.load_weights("unet_Datgen_NoMean448.hdf5")
-model.load_weights("unet_Datgen_256Frozen.hdf5")
+model = load_model('./models/unet_Datgen_256Frozen.hdf5')
 
 #model.load_weights("unet_1chan.hdf5")
 
@@ -54,45 +55,7 @@ train_mean= np.load("./npydata/train_mean_256.npy") #mydata.get_mean()
 #train_mea n = np.load("./npydata/train_mean.npy") #mydata.get_mean()
 
 # Process video with trained Unet model
-'''
-for rgb_frame in video:
-	#we can probably predict as a batch
-	#resize the frame, divide by 255, subtract mean?
-	#rgb_frame
-    
-    #use PIL for test
-	#ims_PIL = Image.fromarray(rgb_frame);
-	#ims = ims_PIL.resize((128, 128),Image.NEAREST)
-	#ims = np.array(ims)
-	ims = cv2.resize(rgb_frame,(128,128) ,interpolation = cv2.INTER_CUBIC)
-	ims = ims.astype('float32')    
-	ims /=255.0
-	ims -=train_mean
 
-	res = model.predict(ims[newaxis,...])
-	
-	#res = res>0.5
-	res_road = cv2.resize(res[0,...,0],(800,600) ,interpolation = cv2.INTER_NEAREST)
-	res_vehicle = cv2.resize(res[0,...,1],(800,600) ,interpolation = cv2.INTER_CUBIC)
-	
-	res_road = (res_road>0.8).astype('uint8')
-	res_vehicle = (res_vehicle>0.01).astype('uint8')
-	
-	#print(res_vehicle.shape)
-	#print(res_vehicle)
-	#result is two arrays
-	answer_key[frame] = [encode(res_vehicle), encode(res_road)]
-    
-	#print(frame)
-	#if(frame ==1):
-		#print(res_vehicle.shape)  
-        
-    # Increment frame
-	frame+=1
-
-# Print output in proper json format
-print (json.dumps(answer_key))
-'''
 
 #process all the frames in the video, resize frame in array [x,128,128,3], then process at once
 dim = video.shape[0]
@@ -140,8 +103,8 @@ if wholeBatch == True:
         res_road = cv2.resize(ylab[...,0],(800,600) ,interpolation = cv2.INTER_CUBIC)
         res_vehicle = cv2.resize(ylab[...,1],(800,600) ,interpolation = cv2.INTER_LINEAR)
 
-        res_road = (res_road>0.9).astype('uint8')
-        res_vehicle = (res_vehicle>0.1).astype('uint8')
+        res_road = (res_road>0.5).astype('uint8')
+        res_vehicle = (res_vehicle>0.5).astype('uint8')
 
         answer_key[frame] = [encode(res_vehicle), encode(res_road)]
 
@@ -158,8 +121,8 @@ else:
         res_road = cv2.resize(ylab[0,...,0],(800,600) ,interpolation = cv2.INTER_LINEAR)
         res_vehicle = cv2.resize(ylab[0,...,1],(800,600) ,interpolation = cv2.INTER_LINEAR)
 
-        res_road = (res_road>0.7).astype('uint8')
-        res_vehicle = (res_vehicle>0.4).astype('uint8')
+        res_road = (res_road>0.5).astype('uint8')
+        res_vehicle = (res_vehicle>0.5).astype('uint8')
         
         answer_key[frame] = [encode(res_vehicle[...]), encode(res_road[...])]
 

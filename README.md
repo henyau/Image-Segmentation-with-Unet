@@ -77,3 +77,7 @@ A video of a test sample can be viewed in the images directory.
 Clicking on the sample test output image below links to a video of a sample output overlaid on the test video. 
 
 [![IMAGE ALT TEXT HERE](https://raw.githubusercontent.com/henyau/Image-Segmentation-with-Unet/master/images/testOut.png)](https://github.com/henyau/Image-Segmentation-with-Unet/blob/master/images/outputvideo.mp4?raw=true)
+
+### Todo
+
+Convert to TensorRT. Has custom loss functions which need to be converted to plug-ins.
